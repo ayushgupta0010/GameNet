@@ -1,4 +1,4 @@
-# Shelfmix — Next.js game recommender
+# GameNet — Next.js game recommender
 
 A single Next.js app: the frontend (App Router pages) and the backend proxy
 (Route Handlers) that previously lived in the separate Express server now

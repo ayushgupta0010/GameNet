@@ -73,9 +73,7 @@ export default function Home() {
       {/* Hero */}
       <section className="mb-10">
         <h1 className="font-display text-4xl font-bold leading-tight text-parchment-100 sm:text-5xl">
-          Build a shelf.
-          <br />
-          Get your next twenty.
+          Find Your Next Favorite Game! 
         </h1>
         <p className="mt-3 max-w-[60ch] text-parchment-300">
           Add up to five games you love. We'll read their genres, tags, and
