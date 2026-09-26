@@ -19,10 +19,6 @@ export default function Home() {
   const [generating, setGenerating] = useState(false);
   const [generateError, setGenerateError] = useState(null);
 
-  // The sidebar needs to keep rendering its last game while it animates
-  // closed, and needs to mount at width 0 before animating open — so its
-  // content (sidebarGame) and its open/closed flag (sidebarOpen) are kept
-  // one step removed from `focusedGame` itself.
   const [sidebarGame, setSidebarGame] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const closeTimeoutRef = useRef(null);
@@ -138,7 +134,7 @@ export default function Home() {
               )}
             </section>
 
-            {/* Shelf */}
+            {/* selected-games */}
             <section className="mb-10">
               <div className="mb-3 flex items-baseline justify-between">
                 <h2 className="font-display text-lg font-medium text-parchment-100">

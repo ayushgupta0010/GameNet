@@ -11,7 +11,7 @@ export default function GameCard({ game, onClick, onRemove, reason }) {
             e.stopPropagation();
             onRemove(game.id);
           }}
-          aria-label={`Remove ${game.name} from your shelf`}
+          aria-label={`Remove ${game.name} from your selected-games`}
           className="absolute right-2 top-2 z-10 flex h-6 w-6 items-center justify-center rounded-full bg-ink-950/80 text-parchment-100 opacity-0 transition-opacity group-hover:opacity-100 hover:bg-clay-500"
         >
           ×

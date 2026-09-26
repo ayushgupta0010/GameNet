@@ -27,11 +27,11 @@ body {
   }
 }
 
-/* Thin scrollbar for the horizontal shelf strip */
-.shelf-scroll::-webkit-scrollbar {
+/* Thin scrollbar for the horizontal selected-games strip */
+.selected-games-scroll::-webkit-scrollbar {
   height: 6px;
 }
-.shelf-scroll::-webkit-scrollbar-thumb {
+.selected-games-scroll::-webkit-scrollbar-thumb {
   background: theme("colors.ink.600");
   border-radius: 999px;
 }

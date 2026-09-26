@@ -20,7 +20,7 @@ Visit `http://localhost:3000`.
 
 ```
 app/
-  page.js                 the whole UI (search, shelf, detail panel, results)
+  page.js                 the whole UI (search, selected-games, detail panel, results)
   layout.js                fonts + global shell
   globals.css               Tailwind + a few base styles
   api/
@@ -29,7 +29,7 @@ app/
     recommend/route.js      POST /api/recommend          → Gemini + RAWG resolve
 components/
   SearchBar.jsx              debounced autocomplete input
-  GameCard.jsx                compact card (shelf strip + recommendations grid)
+  GameCard.jsx                compact card (selected-games strip + recommendations grid)
   DetailPanel.jsx             large focused metadata box, with trailer
 lib/
   rawg.js                    RAWG fetch + cache, same as the Express version
@@ -45,12 +45,12 @@ Express proxy gave you.
 
 1. Type in the search bar → debounced call to `/api/games/search`.
 2. Pick a result → `/api/games/:id` fetches the full metadata box (image,
-   genres, ratings, description, trailer) and adds it to "Your shelf" (max 5).
+   genres, ratings, description, trailer) and adds it to "Your selected-games" (max 5).
 3. Click "Generate recommendations" → `/api/recommend` asks Gemini for
    similar titles (structured JSON output) and resolves each one back to a
    RAWG record, dropping any that don't match confidently.
 4. Recommendations render in the same card style, each with a one-line
-   reason from Gemini. Clicking any card (shelf or recommendation) opens it
+   reason from Gemini. Clicking any card (selected-games or recommendation) opens it
    in the large detail panel.
 
 ## Design notes

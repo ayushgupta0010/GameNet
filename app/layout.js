@@ -16,7 +16,7 @@ const body = IBM_Plex_Sans({
 export const metadata = {
   title: "GameNet — find your next game",
   description:
-    "Pick up to five games you love and get a shelf of similar titles, pulled from RAWG and shaped by AI.",
+    "Pick up to five games you love and get a selected-games of similar titles, pulled from RAWG and shaped by AI.",
 };
 
 export default function RootLayout({ children }) {

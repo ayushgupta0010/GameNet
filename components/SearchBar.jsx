@@ -68,7 +68,7 @@ export default function SearchBar({ onSelect, disabled }) {
         onFocus={() => results.length > 0 && setOpen(true)}
         placeholder={
           disabled
-            ? "You've got 5 games on the shelf — remove one to add another"
+            ? "You've got 5 games on the selected-games — remove one to add another"
             : "Type a game you love, like Hollow Knight or Portal 2…"
         }
         className="w-full rounded-card border border-ink-600 bg-ink-900 px-5 py-4 text-lg text-parchment-100 placeholder:text-parchment-500 focus:border-marigold-500 disabled:cursor-not-allowed disabled:opacity-50"
