@@ -1,3 +1,5 @@
+// NOTE: swap this for your actual repo URL.
+const GITHUB_REPO_URL = "https://github.com/your-org/GameNet";
 
 export default function Footer() {
   return (
@@ -6,14 +8,13 @@ export default function Footer() {
         <p>GameNet — recommendations by Gemini, metadata by RAWG.</p>
 
         <a
-          href={`https://github.com/ayushgupta0010/GameNet`}
+          href={GITHUB_REPO_URL}
           target="_blank"
           rel="noreferrer"
           aria-label="View source on GitHub"
           className="flex items-center gap-2 text-parchment-500 transition-colors hover:text-parchment-100"
         >
           <GitHubIcon className="h-5 w-5" />
-          <span className="hidden sm:inline">Source</span>
         </a>
       </div>
     </footer>

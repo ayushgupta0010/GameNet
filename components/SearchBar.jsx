@@ -13,16 +13,20 @@ export default function SearchBar({ onSelect, disabled }) {
     if (!query.trim()) {
       setResults([]);
       setOpen(false);
+      setLoading(false);
       return;
     }
 
+    // Open immediately so the "Searching…" state is visible for the full
+    // debounce + fetch window, not just after results come back.
     setLoading(true);
+    setOpen(true);
+
     const handle = setTimeout(async () => {
       try {
         const res = await fetch(`/api/games/search?q=${encodeURIComponent(query)}`);
         const data = await res.json();
         setResults(data.results || []);
-        setOpen(true);
       } catch {
         setResults([]);
       } finally {
@@ -64,8 +68,8 @@ export default function SearchBar({ onSelect, disabled }) {
         onFocus={() => results.length > 0 && setOpen(true)}
         placeholder={
           disabled
-            ? "You've got 5 games selected. Remove one to add another"
-            : "Type a game you love, like Subnautica or Portal 2…"
+            ? "You've got 5 games on the shelf — remove one to add another"
+            : "Type a game you love, like Hollow Knight or Portal 2…"
         }
         className="w-full rounded-card border border-ink-600 bg-ink-900 px-5 py-4 text-lg text-parchment-100 placeholder:text-parchment-500 focus:border-marigold-500 disabled:cursor-not-allowed disabled:opacity-50"
       />
