@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-image:
+    radial-gradient(circle at 15% -10%, rgba(242, 169, 59, 0.10), transparent 45%),
+    radial-gradient(circle at 85% 0%, rgba(63, 167, 158, 0.10), transparent 40%);
+  background-attachment: fixed;
+}
+
+/* Visible keyboard focus everywhere, styled to match the palette */
+:focus-visible {
+  outline: 2px solid theme("colors.marigold.500");
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Thin scrollbar for the horizontal shelf strip */
+.shelf-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+.shelf-scroll::-webkit-scrollbar-thumb {
+  background: theme("colors.ink.600");
+  border-radius: 999px;
+}
