@@ -1,5 +1,5 @@
 // NOTE: swap this for your actual repo URL.
-const GITHUB_REPO_URL = "https://github.com/your-org/GameNet";
+const GITHUB_REPO_URL = "https://github.com/ayushgupta0010/GameNet";
 
 export default function Footer() {
   return (

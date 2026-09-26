@@ -4,19 +4,27 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 
 export default function ShuffleCarousel({ images }) {
-    console.log(images)
-    // 1. Initial setup: Filter out deleted images immediately
-    const validImages = images.filter((img) => !img.is_deleted);
-    const [currentImages, setCurrentImages] = useState(validImages);
+    const [currentImages, setCurrentImages] = useState(
+        () => (images || []).filter((img) => !img.is_deleted)
+    );
     const [currentIndex, setCurrentIndex] = useState(0);
 
+    // Re-sync whenever a new `images` prop comes in (e.g. the user focused a
+    // different game). Without this, `currentImages` stayed pinned to
+    // whatever game was focused first, since useState's initial value is
+    // only used on mount.
+    useEffect(() => {
+        const validImages = (images || []).filter((img) => !img.is_deleted);
+        setCurrentImages(validImages);
+        setCurrentIndex(0);
+    }, [images]);
 
-    // 2. Fallback if the array is empty after filtering
+    // Fallback if there are no images (or none left after filtering).
     if (!currentImages || currentImages.length === 0) {
         return <div className="p-4 text-center text-gray-500">No images available.</div>;
     }
 
-    // 3. Navigation handlers
+    // Navigation handlers
     const handleNext = () => {
         setCurrentIndex((prev) => (prev === currentImages.length - 1 ? 0 : prev + 1));
     };
@@ -33,6 +41,7 @@ export default function ShuffleCarousel({ images }) {
             {/* Image Container */}
             <div className="relative w-full aspect-video bg-gray-900 rounded-xl overflow-hidden shadow-lg border-gray-500">
                 <Image
+                    key={activeImage.id}
                     src={activeImage.image}
                     alt={`Carousel image ${activeImage.id}`}
                     fill
