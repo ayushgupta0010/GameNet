@@ -39,7 +39,7 @@ export default function DetailPanel({ game, onClose }) {
 
       <div
         className={`grid items-center gap-5 p-5 ${
-          game.trailerUrl ? "md:grid-cols-[1.3fr_1fr]" : "grid-cols-1"
+          game.trailerUrl ? "md:grid-cols-[1.5fr_1fr]" : "grid-cols-1"
         }`}
       >
         <div className="space-y-4">
@@ -93,7 +93,7 @@ export default function DetailPanel({ game, onClose }) {
           <video
             controls
             poster={game.backgroundImage || undefined}
-            className="h-fit w-full rounded-card border border-ink-700 md:sticky md:top-5"
+            className="h-fit w-full rounded-card border-2 shadow-2xl border-yellow-700 md:sticky md:top-5"
           >
             <source src={game.trailerUrl} />
           </video>

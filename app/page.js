@@ -102,7 +102,7 @@ export default function Home() {
       <section className="mb-10">
         <div className="mb-3 flex items-baseline justify-between">
           <h2 className="font-display text-lg font-medium text-parchment-100">
-            Your shelf
+            Games Selected
           </h2>
           <span className="text-sm text-parchment-500">
             {selectedGames.length}/{MAX_GAMES}
