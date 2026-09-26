@@ -3,7 +3,7 @@ export default function Footer() {
   return (
     <footer className="border-t border-ink-700">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-5 py-6 text-sm text-parchment-500">
-        <p>Shelfmix — recommendations by Gemini, metadata by RAWG.</p>
+        <p>GameNet — recommendations by Gemini, metadata by RAWG.</p>
 
         <a
           href={`https://github.com/ayushgupta0010/GameNet`}
