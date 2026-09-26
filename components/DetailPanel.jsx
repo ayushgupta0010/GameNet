@@ -37,60 +37,66 @@ export default function DetailPanel({ game, onClose }) {
         </div>
       </div>
 
-      <div className="space-y-4 p-5">
-        <div className="flex flex-wrap gap-2">
-          {game.rating > 0 && (
-            <Badge label={`★ ${game.rating.toFixed(1)} RAWG`} tone="marigold" />
-          )}
-          {game.metacritic && <Badge label={`${game.metacritic} Metacritic`} tone="teal" />}
-        </div>
-
-        {game.genres?.length > 0 && (
-          <div className="flex flex-wrap gap-1.5">
-            {game.genres.map((g) => (
-              <span
-                key={g}
-                className="rounded-card bg-teal-500/15 px-2.5 py-1 text-xs text-teal-400"
-              >
-                {g}
-              </span>
-            ))}
+      <div
+        className={`grid items-center gap-5 p-5 ${
+          game.trailerUrl ? "md:grid-cols-[1.3fr_1fr]" : "grid-cols-1"
+        }`}
+      >
+        <div className="space-y-4">
+          <div className="flex flex-wrap gap-2">
+            {game.rating > 0 && (
+              <Badge label={`★ ${game.rating.toFixed(1)} RAWG`} tone="marigold" />
+            )}
+            {game.metacritic && <Badge label={`${game.metacritic} Metacritic`} tone="teal" />}
           </div>
-        )}
 
-        {game.description && (
-          <p className="max-w-[70ch] text-sm leading-relaxed text-parchment-300">
-            {game.description.length > 500
-              ? `${game.description.slice(0, 500).trim()}…`
-              : game.description}
-          </p>
-        )}
+          {game.genres?.length > 0 && (
+            <div className="flex flex-wrap gap-1.5">
+              {game.genres.map((g) => (
+                <span
+                  key={g}
+                  className="rounded-card bg-teal-500/15 px-2.5 py-1 text-xs text-teal-400"
+                >
+                  {g}
+                </span>
+              ))}
+            </div>
+          )}
+
+          {game.description && (
+            <p className="max-w-[70ch] text-sm leading-relaxed text-parchment-300">
+              {game.description.length > 500
+                ? `${game.description.slice(0, 500).trim()}…`
+                : game.description}
+            </p>
+          )}
+
+          {game.platforms?.length > 0 && (
+            <p className="text-xs text-parchment-500">
+              Platforms: {game.platforms.join(", ")}
+            </p>
+          )}
+
+          {game.website && (
+            <a
+              href={game.website}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-block text-sm text-marigold-500 hover:text-marigold-400"
+            >
+              Official site ↗
+            </a>
+          )}
+        </div>
 
         {game.trailerUrl && (
           <video
             controls
             poster={game.backgroundImage || undefined}
-            className="w-full rounded-card border border-ink-700"
+            className="h-fit w-full rounded-card border border-ink-700 md:sticky md:top-5"
           >
             <source src={game.trailerUrl} />
           </video>
-        )}
-
-        {game.platforms?.length > 0 && (
-          <p className="text-xs text-parchment-500">
-            Platforms: {game.platforms.join(", ")}
-          </p>
-        )}
-
-        {game.website && (
-          <a
-            href={game.website}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-block text-sm text-marigold-500 hover:text-marigold-400"
-          >
-            Official site ↗
-          </a>
         )}
       </div>
     </div>

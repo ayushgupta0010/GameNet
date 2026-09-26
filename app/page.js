@@ -4,6 +4,8 @@ import { useState } from "react";
 import SearchBar from "../components/SearchBar.jsx";
 import GameCard from "../components/GameCard.jsx";
 import DetailPanel from "../components/DetailPanel.jsx";
+import Navbar from "../components/Navbar.jsx";
+import Footer from "../components/Footer.jsx";
 
 const MAX_GAMES = 5;
 
@@ -69,16 +71,22 @@ export default function Home() {
   }
 
   return (
-    <main className="mx-auto max-w-5xl px-5 py-12 sm:py-20">
+    <>
+      <Navbar
+        selectedCount={selectedGames.length}
+        maxGames={MAX_GAMES}
+        generating={generating}
+        onGenerate={handleGenerate}
+      />
+
+      <main className="mx-auto max-w-5xl px-5 py-12 sm:py-20">
       {/* Hero */}
       <section className="mb-10">
         <h1 className="font-display text-4xl font-bold leading-tight text-parchment-100 sm:text-5xl">
-          Find Your Next Favorite Game! 
+          Find Your Next Favorite Game!
         </h1>
         <p className="mt-3 max-w-[60ch] text-parchment-300">
-          Add up to five games you love. We'll read their genres, tags, and
-          tone, and hand back a shelf of similar titles pulled straight from
-          RAWG's catalog.
+          Add up to 5 games that you enjoy to receive recommendations on similar games!
         </p>
       </section>
 
@@ -117,14 +125,6 @@ export default function Home() {
             ))}
           </div>
         )}
-
-        <button
-          onClick={handleGenerate}
-          disabled={selectedGames.length === 0 || generating}
-          className="mt-5 rounded-card bg-marigold-500 px-6 py-3 font-display font-medium text-ink-950 transition-colors hover:bg-marigold-400 disabled:cursor-not-allowed disabled:bg-ink-700 disabled:text-parchment-500"
-        >
-          {generating ? "Reading your shelf…" : "Generate recommendations"}
-        </button>
 
         {generateError && (
           <p className="mt-3 text-sm text-clay-500">
@@ -167,6 +167,9 @@ export default function Home() {
           </div>
         </section>
       )}
-    </main>
+      </main>
+
+      <Footer />
+    </>
   );
 }
