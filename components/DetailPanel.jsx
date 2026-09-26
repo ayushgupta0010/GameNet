@@ -1,7 +1,17 @@
 "use client";
 
+import ShuffleCarousel from "./Screenshots";
+
+import { use, useEffect, useState } from "react";
+
 export default function DetailPanel({ game, onClose, compact = false }) {
   if (!game) return null;
+
+  const [screenshots, setScreenshots] = useState(game.screenshots)
+
+  useEffect(() => {
+    setScreenshots(game.screenshots)
+  }, [game.screenshots])
 
   return (
     <div className="overflow-hidden rounded-card border border-ink-700 bg-ink-900">
@@ -16,11 +26,12 @@ export default function DetailPanel({ game, onClose, compact = false }) {
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-ink-950 via-ink-950/10 to-transparent" />
 
+
         {onClose && (
           <button
-            onClick={onClose}
-            aria-label="Close details"
-            className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-ink-950/70 text-parchment-100 hover:bg-ink-950"
+          onClick={onClose}
+          aria-label="Close details"
+          className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-ink-950/70 text-parchment-100 hover:bg-ink-950"
           >
             ×
           </button>
@@ -32,6 +43,7 @@ export default function DetailPanel({ game, onClose, compact = false }) {
           </h2>
           <p className="mt-1 text-sm text-parchment-300">
             {game.released ? new Date(game.released).getFullYear() : "TBA"}
+            {game.developerName ? ` · ${game.developerName}` : "" } 
             {game.esrbRating ? ` · ${game.esrbRating}` : ""}
           </p>
         </div>
@@ -71,6 +83,8 @@ export default function DetailPanel({ game, onClose, compact = false }) {
             </p>
           )}
 
+          <ShuffleCarousel images={screenshots}/>
+
           {game.platforms?.length > 0 && (
             <p className="text-xs text-parchment-500">
               Platforms: {game.platforms.join(", ")}
@@ -90,13 +104,16 @@ export default function DetailPanel({ game, onClose, compact = false }) {
         </div>
 
         {game.trailerUrl && (
-          <video
-            controls
-            poster={game.backgroundImage || undefined}
-            className="h-fit w-full rounded-card border border-ink-700 md:sticky md:top-5"
-          >
-            <source src={game.trailerUrl} />
-          </video>
+          <div className="flex flex-col border border-ink-700">
+            <video
+              controls
+              poster={game.backgroundImage || undefined}
+              className="h-fit w-full md:sticky md:top-5"
+            >
+              <source src={game.trailerUrl} />
+            </video>
+            <span className="bg-ink-950 text-center border-t border-ink-700">Watch {game.name}'s Trailer</span>
+          </div>
         )}
       </div>
     </div>
