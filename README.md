@@ -1,4 +1,4 @@
-# GameNet — Next.js game recommender
+# GameNet — Find similar games to the ones you like!
 
 ## Setup
 
