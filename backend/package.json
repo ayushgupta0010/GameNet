@@ -1,0 +1,21 @@
+{
+  "name": "game-recommender-backend",
+  "version": "1.0.0",
+  "description": "Backend proxy for a game recommender app: proxies RAWG for search/metadata, calls Gemini for similar-game suggestions, and resolves those suggestions back to RAWG records.",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.4.0",
+    "node-cache": "^5.1.2"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
