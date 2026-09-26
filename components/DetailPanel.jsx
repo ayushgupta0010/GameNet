@@ -105,6 +105,7 @@ export default function DetailPanel({ game, onClose, compact = false }) {
 
         {game.trailerUrl && (
           <div className="flex flex-col border border-ink-700">
+            <span className="bg-ink-950 text-center border-t border-ink-700 py-1">{game.name}'s Trailer</span>
             <video
               controls
               poster={game.backgroundImage || undefined}
@@ -112,7 +113,6 @@ export default function DetailPanel({ game, onClose, compact = false }) {
             >
               <source src={game.trailerUrl} />
             </video>
-            <span className="bg-ink-950 text-center border-t border-ink-700">Watch {game.name}'s Trailer</span>
           </div>
         )}
       </div>

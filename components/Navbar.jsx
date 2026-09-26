@@ -22,7 +22,7 @@ export default function Navbar({ selectedCount, maxGames, generating, onGenerate
             disabled={disabled}
             className="rounded-card bg-marigold-500 px-5 py-2 font-display text-sm font-medium text-ink-950 transition-colors hover:bg-marigold-400 disabled:cursor-not-allowed disabled:bg-ink-700 disabled:text-parchment-500"
           >
-            {generating ? "Reading your selected-games…" : "Generate recommendations"}
+            {generating ? "Generating recommendations..." : "Generate recommendations"}
           </button>
         </div>
       </div>
