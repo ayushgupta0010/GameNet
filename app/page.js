@@ -6,6 +6,7 @@ import GameCard from "../components/GameCard.jsx";
 import DetailPanel from "../components/DetailPanel.jsx";
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
+import ChatWidget from "../components/ChatWidget.jsx";
 import { useResizableSidebar } from "../lib/useResizableSidebar.js";
 import { encodeSharePayload } from "../lib/shareEncoding.js";
 
@@ -31,7 +32,6 @@ export default function Home() {
     sidebarWidth,
     isResizing,
     handleResizeStart,
-    handleResizeKeyDown,
     MIN_SIDEBAR_WIDTH,
     MAX_SIDEBAR_WIDTH,
   } = useResizableSidebar(focusedGame);
@@ -302,7 +302,6 @@ export default function Home() {
               aria-valuemax={MAX_SIDEBAR_WIDTH}
               tabIndex={0}
               onMouseDown={handleResizeStart}
-              onKeyDown={handleResizeKeyDown}
               className="group absolute inset-y-0 left-5 z-10 hidden w-2.5 -translate-x-1/2 cursor-col-resize touch-none md:block"
             >
               <div className="mx-auto h-full w-px bg-transparent transition-colors group-hover:bg-marigold-500 group-focus-visible:bg-marigold-500 group-active:bg-marigold-500" />
@@ -323,6 +322,7 @@ export default function Home() {
       </div>
 
       <Footer />
+      <ChatWidget />
     </>
   );
 }
