@@ -5,6 +5,8 @@ import GameCard from "./GameCard.jsx";
 import DetailPanel from "./DetailPanel.jsx";
 import { useResizableSidebar } from "../lib/useResizableSidebar.js";
 
+// test
+
 export default function ShareView({ selectedGames, recommendations, missingCount = 0 }) {
   const [focusedGame, setFocusedGame] = useState(null);
   const [fetchingGameName, setFetchingGameName] = useState(null);
