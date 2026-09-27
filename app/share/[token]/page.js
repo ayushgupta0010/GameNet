@@ -2,7 +2,7 @@ import Link from "next/link";
 import Footer from "../../../components/Footer.jsx";
 import { getGameSummary } from "../../../lib/rawg.js";
 import { decodeSharePayload } from "../../../lib/shareEncoding.js";
-import ShareView from "../../../components/ShareView.jsx";
+import ShareView from "../../../components/ShareView.jsx"
 
 // Every share link is unique per token, so there's nothing useful to
 // prerender at build time, and we want each visit to re-check RAWG (via
