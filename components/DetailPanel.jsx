@@ -30,7 +30,7 @@ export default function DetailPanel({ game, onClose, compact = false }) {
       : description;
 
   return (
-    <div className="overflow-hidden rounded-card border border-ink-700 bg-ink-900">
+    <div className="overflow-hidden rounded-card border bg-ink-900">
       <div className="relative h-56 w-full bg-ink-800 sm:h-72">
         {game.backgroundImage && (
           // eslint-disable-next-line @next/next/no-img-element

@@ -1,14 +1,15 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import SearchBar from "../components/SearchBar.jsx";
 import GameCard from "../components/GameCard.jsx";
 import DetailPanel from "../components/DetailPanel.jsx";
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
+import { useResizableSidebar } from "../lib/useResizableSidebar.js";
+import { encodeSharePayload } from "../lib/shareEncoding.js";
 
 const MAX_GAMES = 5;
-const SIDEBAR_TRANSITION_MS = 300;
 
 export default function Home() {
   const [selectedGames, setSelectedGames] = useState([]);
@@ -19,28 +20,29 @@ export default function Home() {
   const [generating, setGenerating] = useState(false);
   const [generateError, setGenerateError] = useState(null);
 
-  const [sidebarGame, setSidebarGame] = useState(null);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const closeTimeoutRef = useRef(null);
+  // "idle" | "copied" | "manual" (clipboard unavailable/denied, link shown
+  // for the user to copy by hand) | "error"
+  const [shareStatus, setShareStatus] = useState("idle");
+  const [shareUrl, setShareUrl] = useState(null);
 
+  const {
+    sidebarGame,
+    sidebarOpen,
+    sidebarWidth,
+    isResizing,
+    handleResizeStart,
+    handleResizeKeyDown,
+    MIN_SIDEBAR_WIDTH,
+    MAX_SIDEBAR_WIDTH,
+  } = useResizableSidebar(focusedGame);
+
+  // Reset the transient share feedback a few seconds after it appears.
   useEffect(() => {
-    if (focusedGame) {
-      clearTimeout(closeTimeoutRef.current);
-      setSidebarGame(focusedGame);
-      // Two rAFs so the browser paints the closed (0-width) state first,
-      // then the width transition actually has something to animate from.
-      requestAnimationFrame(() =>
-        requestAnimationFrame(() => setSidebarOpen(true)),
-      );
-    } else {
-      setSidebarOpen(false);
-      closeTimeoutRef.current = setTimeout(
-        () => setSidebarGame(null),
-        SIDEBAR_TRANSITION_MS,
-      );
-    }
-    return () => clearTimeout(closeTimeoutRef.current);
-  }, [focusedGame]);
+    if (shareStatus === "idle") return;
+    const delay = shareStatus === "copied" ? 2500 : 6000;
+    const t = setTimeout(() => setShareStatus("idle"), delay);
+    return () => clearTimeout(t);
+  }, [shareStatus]);
 
   async function handleSelectFromSearch(summary) {
     if (selectedGames.length >= MAX_GAMES) return;
@@ -70,6 +72,8 @@ export default function Home() {
     setGenerating(true);
     setGenerateError(null);
     setRecommendations([]);
+    setShareStatus("idle");
+    setShareUrl(null);
 
     try {
       const res = await fetch("/api/recommend", {
@@ -95,6 +99,39 @@ export default function Home() {
       setGenerateError(err.message);
     } finally {
       setGenerating(false);
+    }
+  }
+
+  async function handleShare() {
+    let token;
+    try {
+      token = encodeSharePayload({
+        input: selectedGames.map((g) => g.id),
+        recs: recommendations.map((g) => ({
+          id: g.id,
+          reason: g.reason,
+          as: g.suggestedAs,
+        })),
+      });
+    } catch (err) {
+      console.error(err);
+      setShareStatus("error");
+      return;
+    }
+
+    const url = `${window.location.origin}/share/${token}`;
+    setShareUrl(url);
+
+    try {
+      if (!navigator.clipboard?.writeText) {
+        throw new Error("Clipboard API unavailable");
+      }
+      await navigator.clipboard.writeText(url);
+      setShareStatus("copied");
+    } catch (err) {
+      // We still have a valid link — just couldn't copy it silently, so
+      // fall back to showing it for the user to copy by hand.
+      setShareStatus("manual");
     }
   }
 
@@ -184,18 +221,45 @@ export default function Home() {
             {/* Recommendations */}
             {recommendations.length > 0 && (
               <section>
-                <div className="mb-3 flex items-baseline justify-between">
+                <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
                   <h2 className="font-display text-lg font-medium text-parchment-100">
                     Recommended for you!
                   </h2>
-                  {unresolvedCount > 0 && (
-                    <span className="text-sm text-parchment-500">
-                      {unresolvedCount} suggestion
-                      {unresolvedCount === 1 ? "" : "s"} couldn't be matched to
-                      a RAWG listing
-                    </span>
-                  )}
+                  <div className="flex items-center gap-3">
+                    {unresolvedCount > 0 && (
+                      <span className="text-sm text-parchment-500">
+                        {unresolvedCount} suggestion
+                        {unresolvedCount === 1 ? "" : "s"} couldn't be matched
+                        to a RAWG listing
+                      </span>
+                    )}
+                    <button
+                      onClick={handleShare}
+                      className="rounded-card border border-ink-600 px-3 py-1.5 text-sm font-medium text-parchment-100 transition-colors hover:border-marigold-500 hover:text-marigold-400"
+                    >
+                      {shareStatus === "copied" ? "Link copied!" : "Share results"}
+                    </button>
+                  </div>
                 </div>
+
+                {shareStatus === "manual" && shareUrl && (
+                  <div className="mb-4 flex items-center gap-2 rounded-card border border-ink-600 bg-ink-900 px-3 py-2">
+                    <input
+                      readOnly
+                      value={shareUrl}
+                      onFocus={(e) => e.target.select()}
+                      className="w-full bg-transparent text-sm text-parchment-300 outline-none"
+                    />
+                    <span className="shrink-0 text-xs text-parchment-500">
+                      Copy this link
+                    </span>
+                  </div>
+                )}
+                {shareStatus === "error" && (
+                  <p className="mb-4 text-sm text-clay-500">
+                    Couldn't create a share link. Please try again.
+                  </p>
+                )}
 
                 <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
                   {recommendations.map((game) => (
@@ -216,14 +280,38 @@ export default function Home() {
             floating on top of it. Width (not just transform) is what
             animates, so the push and the slide happen in sync. Hidden on
             narrow screens (see the inline version above) since there's no
-            room to push content sideways. */}
+            room to push content sideways. User-resizable via the drag
+            handle on its left edge; state/handlers come from
+            useResizableSidebar so the share page can reuse the same
+            behavior. */}
         {sidebarGame && (
           <aside
-            className={`sticky top-[57px] hidden h-[calc(100vh-57px)] shrink-0 overflow-hidden border-l border-ink-700 bg-ink-950 transition-[width] duration-300 ease-in-out md:block ${
-              sidebarOpen ? "md:w-[420px]" : "md:w-0"
+            className={`sticky top-[57px] hidden h-[calc(100vh-57px)] shrink-0 overflow-hidden border-l border-ink-700 bg-ink-950 md:block ${
+              isResizing ? "" : "transition-[width] duration-300 ease-in-out"
             }`}
+            style={{ width: sidebarOpen ? `${sidebarWidth}px` : 0 }}
           >
-            <div className="h-full w-[420px] overflow-y-auto p-5">
+            {/* Drag handle. Wider than the visible border so it's easy to
+                grab; only the thin inner line is painted. */}
+            <div
+              role="separator"
+              aria-orientation="vertical"
+              aria-label="Resize detail panel"
+              aria-valuenow={Math.round(sidebarWidth)}
+              aria-valuemin={MIN_SIDEBAR_WIDTH}
+              aria-valuemax={MAX_SIDEBAR_WIDTH}
+              tabIndex={0}
+              onMouseDown={handleResizeStart}
+              onKeyDown={handleResizeKeyDown}
+              className="group absolute inset-y-0 left-5 z-10 hidden w-2.5 -translate-x-1/2 cursor-col-resize touch-none md:block"
+            >
+              <div className="mx-auto h-full w-px bg-transparent transition-colors group-hover:bg-marigold-500 group-focus-visible:bg-marigold-500 group-active:bg-marigold-500" />
+            </div>
+
+            <div
+              className="h-full overflow-y-auto p-5"
+              style={{ width: `${sidebarWidth}px` }}
+            >
               <DetailPanel
                 game={sidebarGame}
                 onClose={() => setFocusedGame(null)}
